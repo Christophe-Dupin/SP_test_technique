@@ -4,9 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+pytest = "*"
+pyyaml = "*"
 
 [dev-packages]
 flake8 = "*"
+autopep8 = "*"
+isort = {extras = ["pipfile", "requirements"], version = "*"}
 
 [requires]
 python_version = "2.7"
