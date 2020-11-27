@@ -5,6 +5,7 @@ import errno
 import re
 import yaml
 import shutil
+from code_test import LOG
 
 
 class PublishTools:
@@ -36,10 +37,11 @@ class PublishTools:
         :rtype: str
         """
         path = os.path.join(self.root_project, self.context, self.asset_name, self.task, self.work)
-        if os.path.exists(path):
-            return path
-        else:
+        if not os.path.exists(path):
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), path)
+
+        LOG.info("Asset working directory : {}".format(path))
+        return path
 
     def get_texture_assignement_yaml_file(self, location):
         """Methode to check if the yaml file exist in the good location.
@@ -81,6 +83,7 @@ class PublishTools:
         files_name = []
         for file in textures.values():
             for i in file:
+                LOG.info("Use texture for the asset: {}".format(i))
                 if i.startswith(os.path.join(self.context, self.asset_name, self.task, self.work)):
                     files_name.append(re.sub('^' + os.path.join(self.context, self.asset_name, self.task, self.work), '', i))
         return files_name
@@ -96,23 +99,30 @@ class PublishTools:
         result = re.match(r"part[A-Z]+", files)
         if result:
             VERSION = "001"
-            return "asset_{}_texture_{}_v{}.{}".format(self.asset_name, result.group(0), VERSION, self.extension)
-
+            texture_file_name = "asset_{}_texture_{}_v{}.{}".format(self.asset_name, result.group(0), VERSION, self.extension)
+            LOG.info("new texture file name : {}".format(texture_file_name))
+            return texture_file_name
+            
     def move_and_rename_file(self, location, files):
         """Methode to all to move and rename file from work folder to the publish folder
 
         :param location: work directory of texture files
         :type location: str
-        :param files: contain only the texture file name use in the scene 
+        :param files: contain only the texture file name use in the scene
         :type files: list
         """
         directory = os.listdir(location)
+
+        result = {"published": [], "already-published": [], "failed": []}
         for file in directory:
             if file in files:
                 shutil.copy("{}{}".format(location, file), "{}{}".format(self.publish_path, file))
                 dst_file = os.path.join(self.publish_path, file)
                 new_dst_file_name = os.path.join(self.publish_path, self.set_name_for_publish_file(file))
-                os.rename(dst_file, new_dst_file_name)
+                publish_file = os.rename(dst_file, new_dst_file_name)
+                result["published"].append(publish_file)
 
+        LOG.info("result : {}".format(result))
+        return result
 
 
