@@ -1,13 +1,12 @@
 # coding: utf8
 """conftest module for pytest."""
 # system imports
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-from builtins import *  # noqa: I201,F4
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import os
 import sys
+from builtins import *  # noqa: I201,F4
 
 import pytest
 

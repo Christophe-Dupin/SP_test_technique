@@ -1,14 +1,13 @@
 # coding: utf8
 """The code_test main module."""
 # system imports
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-from builtins import *  # noqa: I201,F4
-from code_test import LOG
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
+from builtins import *  # noqa: I201,F
+
+from code_test.config import ASSET_NAME, CONTEXT, EXTENSION, ROOT_PROJECT, TASK
 from code_test.publish.utils import PublishTools
-from code_test.config import ASSET_NAME, TASK, EXTENSION, ROOT_PROJECT, CONTEXT
 
 
 def publish_texture():
@@ -36,14 +35,12 @@ def publish_texture():
     # Copy selected textures files from work directory to publish directory and rename with publish nomenclatura
     publish_tools.move_and_rename_file(get_work_file_directory, get_only_files_name)
 
+    # result = {"published": [], "already-published": [], "failed": []}
 
-    #result = {"published": [], "already-published": [], "failed": []}
+    # LOG.info("result : {}".format(result))
 
-    #LOG.info("result : {}".format(result))
-
-    #return result
+    # return result
 
 
 if __name__ == "__main__":
-    a =publish_texture ()
-
+    a = publish_texture()

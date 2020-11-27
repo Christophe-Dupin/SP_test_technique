@@ -1,10 +1,12 @@
 
 """ Class allow to publishTexture. """
-import os
 import errno
+import os
 import re
-import yaml
 import shutil
+
+import yaml
+
 from code_test import LOG
 
 
@@ -39,7 +41,6 @@ class PublishTools:
         path = os.path.join(self.root_project, self.context, self.asset_name, self.task, self.work)
         if not os.path.exists(path):
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), path)
-
         LOG.info("Asset working directory : {}".format(path))
         return path
 
@@ -102,7 +103,7 @@ class PublishTools:
             texture_file_name = "asset_{}_texture_{}_v{}.{}".format(self.asset_name, result.group(0), VERSION, self.extension)
             LOG.info("new texture file name : {}".format(texture_file_name))
             return texture_file_name
-            
+
     def move_and_rename_file(self, location, files):
         """Methode to all to move and rename file from work folder to the publish folder
 
@@ -124,5 +125,3 @@ class PublishTools:
 
         LOG.info("result : {}".format(result))
         return result
-
-

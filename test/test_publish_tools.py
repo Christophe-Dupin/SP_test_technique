@@ -1,9 +1,11 @@
 """Class allow to test methodes from PublishTools Class."""
-import os 
+import os
 
 import yaml
+
+from code_test.config import (ASSET_NAME, CONTEXT, EXTENSION, ROOT_PROJECT,
+                              TASK, TEX_ASSIGN_FILE)
 from code_test.publish.utils import PublishTools
-from code_test.config import ASSET_NAME, TASK, ROOT_PROJECT, CONTEXT, TEX_ASSIGN_FILE, EXTENSION
 
 
 class TestPublishTools:
