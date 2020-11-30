@@ -46,11 +46,8 @@ class YamlManager:
         :return: A dictionnary with the usefull texture
         :rtype: dict
         """
-        if os.path.exists(file):
-            with open(file) as files:
-                return yaml.load(files, Loader=yaml.FullLoader)
-        else:
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), yaml)
+        with open(file) as files:
+            return yaml.load(files, Loader=yaml.FullLoader)
     
     def update_yaml(self, file_path, data):
         with open(file_path, 'w') as file:
