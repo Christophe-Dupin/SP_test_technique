@@ -1,4 +1,4 @@
-    """All constants for the publish tools class."""
+"""All constants for the publish tools class."""
     
 import os
 
