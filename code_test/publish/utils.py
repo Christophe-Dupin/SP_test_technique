@@ -10,10 +10,10 @@ import yaml
 from code_test import LOG
 
 
-class PublishTools:
+class YamlManager:
     """Library of tools for publish."""
 
-    def __init__(self, root_project, context, asset_name, task, extension):
+    def __init__(self, assignment):
         """PublishTools is a class for toolbox to publish texture file.
 
         :param asset_name: Asset name like "myAssetB"
@@ -21,28 +21,7 @@ class PublishTools:
         :param task: Task name like "surfacing"
         :type task: str
         """
-        self.asset_name = asset_name
-        self.task = task
-        self.root_project = root_project
-        self.context = context
-        self.extension = extension
-        self.work = "work/"
-        self.publish = "publish/"
-        self.assignment = "texture_assignment.yaml"
-        self.publish_path = os.path.join(self.root_project, self.context, self.asset_name, self.task, self.publish)
-
-    def get_work_file_directory_from_asset(self):
-        """Methode to get the workFile directory of the asset.
-
-        :raises FileNotFoundError: If direcotry dosn't exist raise an error.
-        :return: the path of the directory
-        :rtype: str
-        """
-        path = os.path.join(self.root_project, self.context, self.asset_name, self.task, self.work)
-        if not os.path.exists(path):
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), path)
-        LOG.info("Asset working directory : {}".format(path))
-        return path
+        self.assignment = assignment
 
     def get_texture_assignement_yaml_file(self, location):
         """Methode to check if the yaml file exist in the good location.
@@ -56,7 +35,7 @@ class PublishTools:
         if os.path.isfile(os.path.join(location, self.assignment)):
             return os.path.join(location, self.assignment)
         else:
-            raise ValueError
+            LOG.error("yaml file doesnt exist please contact your td pipeline")
 
     def get_use_textures_from_yaml(self, tex_assign_file):
         """Methode to get all the texture assign.
@@ -72,6 +51,41 @@ class PublishTools:
                 return yaml.load(file, Loader=yaml.FullLoader)
         else:
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), tex_assign_file)
+    
+    def create_yaml_publish(self)
+
+
+class FilesManager:
+
+    def __init__(self, root_project, context, asset_name, task, extension):
+        """PublishTools is a class for toolbox to publish texture file.
+
+        :param asset_name: Asset name like "myAssetB"
+        :type asset_name: str
+        :param task: Task name like "surfacing"
+        :type task: str
+        """
+        self.context = context
+        self.root_project = root_project
+        self.asset_name = asset_name
+        self.task = task
+        self.extension = extension
+        self.work = "work/"
+        self.publish = "publish/"
+        self.publish_path = os.path.join(self.root_project, self.context, self.asset_name, self.task, self.publish)
+
+    def get_work_file_directory_from_asset(self):
+        """Methode to get the workFile directory of the asset.
+
+        :raises FileNotFoundError: If direcotry dosn't exist raise an error.
+        :return: the path of the directory
+        :rtype: str
+        """
+        path = os.path.join(self.root_project, self.context, self.asset_name, self.task, self.work)
+        if not os.path.exists(path):
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), path)
+        LOG.info("Asset working directory : {}".format(path))
+        return path
 
     def get_only_files_name(self, textures):
         """Methode to return only file texture file name.
@@ -88,7 +102,7 @@ class PublishTools:
                 if i.startswith(os.path.join(self.context, self.asset_name, self.task, self.work)):
                     files_name.append(re.sub('^' + os.path.join(self.context, self.asset_name, self.task, self.work), '', i))
         return files_name
-
+    
     def set_name_for_publish_file(self, files):
         """Set the correct publish file name for the texture file.
 
@@ -103,7 +117,7 @@ class PublishTools:
             texture_file_name = "asset_{}_texture_{}_v{}.{}".format(self.asset_name, result.group(0), VERSION, self.extension)
             LOG.info("new texture file name : {}".format(texture_file_name))
             return texture_file_name
-
+    
     def move_and_rename_file(self, location, files):
         """Methode to all to move and rename file from work folder to the publish folder
 
@@ -120,8 +134,8 @@ class PublishTools:
                 shutil.copy("{}{}".format(location, file), "{}{}".format(self.publish_path, file))
                 dst_file = os.path.join(self.publish_path, file)
                 new_dst_file_name = os.path.join(self.publish_path, self.set_name_for_publish_file(file))
-                publish_file = os.rename(dst_file, new_dst_file_name)
-                result["published"].append(publish_file)
+                os.rename(dst_file, new_dst_file_name)
+                result["published"].append(new_dst_file_name)
 
         LOG.info("result : {}".format(result))
         return result
