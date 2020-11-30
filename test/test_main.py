@@ -25,8 +25,4 @@ def test_publish_texture():
             tex_assign_file=pytest.TEX_ASSIGN_FILE,
         )
     )
-    ctm.publish_texture(
-        asset_name=pytest.ASSET_NAME,
-        task=pytest.TASK,
-        tex_assign_file=pytest.TEX_ASSIGN_FILE,
-    )
+    ctm.publish_texture()
