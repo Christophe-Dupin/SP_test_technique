@@ -6,8 +6,8 @@ from __future__ import (absolute_import, division, print_function,
 
 from builtins import *  # noqa: I201,F
 
-from code_test.config import ASSET_NAME, CONTEXT, EXTENSION, ROOT_PROJECT, TASK
-from code_test.publish.utils import PublishTools
+from code_test.config import ASSET_NAME, ASSIGNMENT_FILE, CONTEXT, EXTENSION, ROOT_PROJECT, TASK
+from code_test.publish.utils import FilesManager, YamlManager
 
 
 def publish_texture():
@@ -22,18 +22,19 @@ def publish_texture():
     :return: A resume of the publish, like {"published": [], "already-published": [], "failed": []}
     :rtype: dict
     """
-    # Instanciate PublishTools Class
-    publish_tools = PublishTools(ROOT_PROJECT, CONTEXT, ASSET_NAME, TASK, EXTENSION)
+    # Instanciate FilesManager class and YamlManager class
+    files_manager = FilesManager(ROOT_PROJECT, CONTEXT, ASSET_NAME, TASK, EXTENSION)
+    yaml_manager = YamlManager(ASSIGNMENT_FILE)
     # Get work directory of the texturefile for a specific asset
-    get_work_file_directory = publish_tools.get_work_file_directory_from_asset()
+    get_work_file_directory = files_manager.get_work_file_directory_from_asset()
     # Get path of of the texture assignement yaml file
-    get_texture_assignement_yaml = publish_tools.get_texture_assignement_yaml_file(get_work_file_directory)
+    get_texture_assignement_yaml = yaml_manager.get_texture_assignement_yaml_file(get_work_file_directory)
     # Get use textures in the yaml file
-    get_use_textures_from_yaml = publish_tools.get_use_textures_from_yaml(get_texture_assignement_yaml)
+    get_use_textures_from_yaml = yaml_manager.get_use_textures_from_yaml(get_texture_assignement_yaml)
     # Keep only shot name of the textures files
-    get_only_files_name = publish_tools.get_only_files_name(get_use_textures_from_yaml)
+    get_only_files_name = files_manager.get_only_files_name(get_use_textures_from_yaml)
     # Copy selected textures files from work directory to publish directory and rename with publish nomenclatura
-    publish_tools.move_and_rename_file(get_work_file_directory, get_only_files_name)
+    files_manager.move_and_rename_file(get_work_file_directory, get_only_files_name)
 
     # result = {"published": [], "already-published": [], "failed": []}
 
