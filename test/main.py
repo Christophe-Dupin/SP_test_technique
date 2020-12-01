@@ -1,8 +1,12 @@
 # coding: utf8
 """Module."""
 # system imports
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals,
+)
 
 from builtins import *  # noqa: I201,F4
 
@@ -10,6 +14,7 @@ import pytest
 
 from code_test import LOG
 from code_test import PublishTools
+
 publish_tools = PublishTools()
 
 
