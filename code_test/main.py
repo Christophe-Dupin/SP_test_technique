@@ -6,7 +6,8 @@ from __future__ import (absolute_import, division, print_function,
 
 from builtins import *  # noqa: I201,F
 
-from code_test.config import ASSET_NAME, ASSIGNMENT_FILE, CONTEXT, EXTENSION, ROOT_PROJECT, TASK
+from code_test.config import (ASSET_NAME, ASSIGNMENT_FILE, CONTEXT, EXTENSION,
+                              ROOT_PROJECT, TASK)
 from code_test.publish.tools import FilesManager, YamlManager
 
 
@@ -33,11 +34,14 @@ class PublishTools:
         # Get texture which are already publish
         info_from_yaml_publish_file = yaml_manager.get_info_from_yaml(yaml_publish_file)
         # Copy selected textures files from work directory to publish directory and rename with publish nomenclatura
-        files_manager.move_and_rename_file(asset_work_directory, only_files_name, info_from_yaml_publish_file)
+        publish = files_manager.move_and_rename_file(asset_work_directory, only_files_name, info_from_yaml_publish_file)
         # Update yaml with the published texture
-        publish_yaml_file = yaml_manager.update_yaml(yaml_publish_file, only_files_name)
+        yaml_manager.update_yaml(yaml_publish_file, only_files_name)
+
+        return publish
+
 
 if __name__ == "__main__":
+
     publish_tools = PublishTools()
     publish_tools.publish_texture()
-
