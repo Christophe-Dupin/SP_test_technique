@@ -7,10 +7,10 @@ import yaml
 from code_test.config import (ASSET_NAME, ASSIGNMENT_FILE, CONTEXT, EXTENSION, ROOT_PROJECT,
                               TASK, TEX_ASSIGN_FILE)
 from code_test.publish.tools import FilesManager, YamlManager
-
+files_manager = FilesManager(ROOT_PROJECT, CONTEXT, ASSET_NAME, TASK, EXTENSION)
+asset_work_directory = files_manager.get_file_directory_from_asset(files_manager.work)
 yaml_manager = YamlManager(ASSIGNMENT_FILE)
 yaml_work_file = yaml_manager.get_yaml_file(asset_work_directory)
-file = TEX_ASSIGN_FILE
 
 
 def test_get_texure_assignement_yaml_file():
@@ -26,5 +26,4 @@ def test_get_info_from_yaml(monkeypatch):
     monkeypatch.setattr(yaml, "load", mock_yaml_load)
     assert yaml_manager.get_info_from_yaml(yaml_work_file) == {'texture_used': ['Assets/myAssetB/surfacing/work/partA_testA.tx', 'Assets/myAssetB/surfacing/work/partB_003.tx', 'Assets/myAssetB/surfacing/work/partC_001.tx']}
 
-def test_update_yaml(monkeypatch):
-    def mock yaml_load(*args, **kwargs):
+
