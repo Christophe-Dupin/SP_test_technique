@@ -11,6 +11,7 @@ import pytest
 from code_test import LOG
 from code_test.main import PublishTools
 
+
 def test_publish_texture():
     """Simple test for the publish_texture.
 
