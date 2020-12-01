@@ -4,9 +4,10 @@ import os
 import pytest
 import yaml
 
-from code_test.config import (ASSET_NAME, ASSIGNMENT_FILE, CONTEXT, EXTENSION, ROOT_PROJECT,
-                              TASK, TEX_ASSIGN_FILE)
+from code_test.config import (ASSET_NAME, ASSIGNMENT_FILE, CONTEXT, EXTENSION,
+                              ROOT_PROJECT, TASK, TEX_ASSIGN_FILE)
 from code_test.publish.tools import FilesManager, YamlManager
+
 files_manager = FilesManager(ROOT_PROJECT, CONTEXT, ASSET_NAME, TASK, EXTENSION)
 asset_work_directory = files_manager.get_file_directory_from_asset(files_manager.work)
 yaml_manager = YamlManager(ASSIGNMENT_FILE)
@@ -25,5 +26,3 @@ def test_get_info_from_yaml(monkeypatch):
         return {'texture_used': ['Assets/myAssetB/surfacing/work/partA_testA.tx', 'Assets/myAssetB/surfacing/work/partB_003.tx', 'Assets/myAssetB/surfacing/work/partC_001.tx']}
     monkeypatch.setattr(yaml, "load", mock_yaml_load)
     assert yaml_manager.get_info_from_yaml(yaml_work_file) == {'texture_used': ['Assets/myAssetB/surfacing/work/partA_testA.tx', 'Assets/myAssetB/surfacing/work/partB_003.tx', 'Assets/myAssetB/surfacing/work/partC_001.tx']}
-
-
