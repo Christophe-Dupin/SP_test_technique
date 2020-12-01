@@ -9,7 +9,8 @@ from builtins import *  # noqa: I201,F4
 import pytest
 
 from code_test import LOG
-from code_test import main as ctm
+from code_test import PublishTools
+publish_tools = PublishTools()
 
 
 def test_publish_texture():
@@ -25,8 +26,4 @@ def test_publish_texture():
             tex_assign_file=pytest.TEX_ASSIGN_FILE,
         )
     )
-    ctm.publish_texture(
-        asset_name=pytest.ASSET_NAME,
-        task=pytest.TASK,
-        tex_assign_file=pytest.TEX_ASSIGN_FILE,
-    )
+    publish_tools.publish_texture()
