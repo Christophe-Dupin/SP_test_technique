@@ -1,5 +1,4 @@
 """All constants for the publish tools class."""
-    
 import os
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -9,7 +8,7 @@ ASSET_NAME = "myAssetB"
 TASK = "surfacing"
 CONTEXT = "Assets"
 EXTENSION = "tx"
-ASSIGNMENT_FILE = "texture_assignment.yaml" 
+ASSIGNMENT_FILE = "texture_assignment.yaml"
 TEX_ASSIGN_FILE = os.path.join(ROOT_PROJECT, CONTEXT, ASSET_NAME, TASK, "work", "texture_assignment.yaml")
 TEX_PUBLISH_ASSIGN_FILE = os.path.join(ROOT_PROJECT, CONTEXT, ASSET_NAME, TASK, "publish", "texture_assignment.yaml")
 WORK_PATH = os.path.join(ROOT_PROJECT, CONTEXT, ASSET_NAME, TASK, "work/")
