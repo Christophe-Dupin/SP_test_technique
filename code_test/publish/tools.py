@@ -200,8 +200,22 @@ class FilesManager:
                     new_dst_file_name = os.path.join(self.publish_path, y)
                     print(new_dst_file_name)
                     os.rename(dst_file, new_dst_file_name)
-                    result["published"].append(y)
+                    work = (
+                        {
+                            "work": os.path.join(
+                                self.get_file_directory_from_asset(self.work),
+                                x,
+                            )
+                        },
+                    )
+                    {"publish": new_dst_file_name}
+                    result["published"].append(work)
             else:
-                result["already-published"].append(x)
+                path = {
+                    "work": os.path.join(
+                        self.get_file_directory_from_asset(self.work), x
+                    )
+                }
+                result["already-published"].append(path)
         LOG.info("result : {}".format(result))
         return result
