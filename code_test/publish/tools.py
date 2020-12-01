@@ -45,7 +45,7 @@ class YamlManager:
         """
         with open(file) as files:
             return yaml.load(files, Loader=yaml.FullLoader)
-    
+
     def update_yaml(self, file_path, data):
         """Update data in yaml file
 
@@ -103,7 +103,7 @@ class FilesManager:
     def get_only_files_name(self, textures):
         """Get only the file name of any files, remove all the absolute path.
 
-        :param textures: It's all the full path of a file 
+        :param textures: It's all the full path of a file
         :type textures: str
         :return: dictionary of the file name
         :rtype: dict
@@ -130,7 +130,7 @@ class FilesManager:
             return "asset_{}_texture_{}_v{}.{}".format(self.asset_name, result.group(0), VERSION, self.extension)
         else:
             LOG.error("Work File doesnt match the nomenclatura please check in the wiki")
-    
+
     def move_and_rename_file(self, location, files, publish):
         """Move and rename file.
 
@@ -145,15 +145,13 @@ class FilesManager:
         """
         result = {"published": [], "already-published": [], "failed": []}
         for x in files["texture_publish"]:
-            if publish["texture_publish"] is None:
+            if publish["texture_publish"] is None or x not in publish["texture_publish"]:
                 shutil.copy("{}{}".format(location, x), "{}{}".format(self.publish_path, x))
                 dst_file = os.path.join(self.publish_path, x)
                 new_dst_file_name = os.path.join(self.publish_path, self.set_name_for_publish_file(x))
                 os.rename(dst_file, new_dst_file_name)
                 result["published"].append(x)
-            elif x in publish["texture_publish"]:
-                result["already-published"].append(x)
             else:
-                result["failed"].append(x)
+                result["already-published"].append(x)
         LOG.info("result : {}".format(result))
         return result
