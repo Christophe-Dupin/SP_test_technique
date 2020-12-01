@@ -1,4 +1,3 @@
-
 """ Class allow to publishTexture. """
 import errno
 import os
@@ -56,12 +55,11 @@ class YamlManager:
         :return: new yaml file
         :rtype: yaml
         """
-        with open(file_path, 'w') as file:
+        with open(file_path, "w") as file:
             return yaml.dump(data, file)
 
 
 class FilesManager:
-
     def __init__(self, root_project, context, asset_name, task, extension):
         """Allow to acces to several tools to manage Files.
 
@@ -83,7 +81,14 @@ class FilesManager:
         self.extension = extension
         self.work = "work/"
         self.publish = "publish/"
-        self.publish_path = os.path.join(self.root_project, self.context, self.asset_name, self.task, self.publish)
+        self.publish_path = os.path.join(
+            self.root_project,
+            self.context,
+            self.asset_name,
+            self.task,
+            self.publish,
+        )
+        self.version = "001"
 
     def get_file_directory_from_asset(self, step):
         """Get the file directory of any asset.
@@ -94,9 +99,13 @@ class FilesManager:
         :return: return the path of the asset
         :rtype: str
         """
-        path = os.path.join(self.root_project, self.context, self.asset_name, self.task, step)
+        path = os.path.join(
+            self.root_project, self.context, self.asset_name, self.task, step
+        )
         if not os.path.exists(path):
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), path)
+            raise FileNotFoundError(
+                errno.ENOENT, os.strerror(errno.ENOENT), path
+            )
         LOG.info("Asset working directory : {}".format(path))
         return path
 
@@ -112,8 +121,24 @@ class FilesManager:
         for file in textures.values():
             for i in file:
                 LOG.info("Use texture for the asset: {}".format(i))
-                if i.startswith(os.path.join(self.context, self.asset_name, self.task, self.work)):
-                    files_name.append(re.sub('^' + os.path.join(self.context, self.asset_name, self.task, self.work), '', i))
+                if i.startswith(
+                    os.path.join(
+                        self.context, self.asset_name, self.task, self.work
+                    )
+                ):
+                    files_name.append(
+                        re.sub(
+                            "^"
+                            + os.path.join(
+                                self.context,
+                                self.asset_name,
+                                self.task,
+                                self.work,
+                            ),
+                            "",
+                            i,
+                        )
+                    )
         return {"texture_publish": files_name}
 
     def set_name_for_publish_file(self, files):
@@ -124,12 +149,29 @@ class FilesManager:
         :return: good texture name to respect nomenclatura
         :rtype: str
         """
-        result = re.match(r"part[A-Z]+", files)
-        if result:
-            VERSION = "001"
-            return "asset_{}_texture_{}_v{}.{}".format(self.asset_name, result.group(0), VERSION, self.extension)
-        else:
-            LOG.error("Work File doesnt match the nomenclatura please check in the wiki")
+        publish_name = []
+        for x in files.values():
+            for y in x:
+                result = re.match(r"part[A-Z]+", y)
+                if (
+                    "asset_{}_texture_{}_v{}.{}".format(
+                        self.asset_name,
+                        result.group(0),
+                        self.version,
+                        self.extension,
+                    )
+                    in publish_name
+                ):
+                    self.version = format(int(self.version) + 1, "03d")
+                publish_name.append(
+                    "asset_{}_texture_{}_v{}.{}".format(
+                        self.asset_name,
+                        result.group(0),
+                        self.version,
+                        self.extension,
+                    )
+                )
+        return publish_name
 
     def move_and_rename_file(self, location, files, publish):
         """Move and rename file.
@@ -145,12 +187,20 @@ class FilesManager:
         """
         result = {"published": [], "already-published": [], "failed": []}
         for x in files["texture_publish"]:
-            if publish["texture_publish"] is None or x not in publish["texture_publish"]:
-                shutil.copy("{}{}".format(location, x), "{}{}".format(self.publish_path, x))
-                dst_file = os.path.join(self.publish_path, x)
-                new_dst_file_name = os.path.join(self.publish_path, self.set_name_for_publish_file(x))
-                os.rename(dst_file, new_dst_file_name)
-                result["published"].append(x)
+            if (
+                publish["texture_publish"] is None
+                or x not in publish["texture_publish"]
+            ):
+                for y in self.set_name_for_publish_file(files):
+                    shutil.copy(
+                        "{}{}".format(location, x),
+                        "{}{}".format(self.publish_path, x),
+                    )
+                    dst_file = os.path.join(self.publish_path, x)
+                    new_dst_file_name = os.path.join(self.publish_path, y)
+                    print(new_dst_file_name)
+                    os.rename(dst_file, new_dst_file_name)
+                    result["published"].append(y)
             else:
                 result["already-published"].append(x)
         LOG.info("result : {}".format(result))
