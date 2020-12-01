@@ -1,12 +1,12 @@
+from code_test.config import ASSET_NAME, CONTEXT, EXTENSION, ROOT_PROJECT, TASK
 from code_test.publish.tools import FilesManager
 
-from code_test.config import ASSET_NAME, CONTEXT, EXTENSION, ROOT_PROJECT, TASK
 files_manager = FilesManager(ROOT_PROJECT, CONTEXT, ASSET_NAME, TASK, EXTENSION)
 
 
 def test_get_file_directory_from_asset():
     step = ["work/", "publish/"]
-    path = files_manager.get_file_directory_from_asset(step)
+    path = files_manager.get_file_directory_from_asset(step[0])
     assert path == "/Users/christophedupin/Documents/projects/repos/testSuperprod/code_test_a_cdupin/project/Assets/myAssetB/surfacing/work/"
 
 
